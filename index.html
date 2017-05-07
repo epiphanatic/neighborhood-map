@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <title>Neighborhood Map</title>
+</head>
+<body>
+
+    <!--TODO: resize map on screen size change - look at online resume (helper js at bottom)-->
+    <!--TODO: alt tags for images-->
+
+    <div class="wrapper">
+        <div id="header">
+            <h3>Sunshine Coast</h3>
+            <i class="fa fa-bars" aria-hidden="true" id="menu-icon" onclick="togglePane()"></i>
+        </div>
+        <div id="left-pane">
+            <input type="search"
+                   name="filter" placeholder="search"
+                   data-bind="textInput: currentFilter">
+            <ul data-bind="foreach: filterLocations">
+                <li data-bind="text: name, click: $parent.setLoc"></li>
+            </ul>
+        </div>
+        <div id="map">
+        </div>
+    </div>
+
+    <script src="libs/knockout-3.2.0-debug.js"></script>
+    <script src="libs/jquery-3.1.1.min.js"></script>
+    <script src="scripts/main.js"></script>
+    <script async src="scripts/menu.js"></script>
+    <script async defer src="https://use.fontawesome.com/f3df52466f.js"></script>
+    <script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCCfPAwwT0vjb6QuZ6aiEX6i0IT4H335ko&v=3'>
+    </script>
+    <script async defer src="scripts/helper.js"></script>
+
+</body>
+</html>

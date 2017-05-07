@@ -1,0 +1,80 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+    padding-left: .5em;
+}
+
+h3 {
+    display: inline-block;
+    padding-left: .5em;
+}
+
+input[type='search'] {
+    height: 40px !important;
+    width: 90%;
+    margin-left: .5em;
+}
+
+#header {
+    position: relative;
+    width: 100%;
+    background-color: black;
+    color: white;
+}
+
+#map {
+    height: 91vh;
+    /*width: 75%;*/
+    /*margin-left: 25%;*/
+}
+
+#left-pane {
+    height: 100%;
+    background-color: black;
+    color: white;
+    /*height: 100%; !* 100% Full-height *!*/
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 9vh;
+    left: 0;
+    /*background-color: #111; !* Black*!*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 2em; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+#left-pane>ul>li {
+    padding: 1em 0 0 0;
+}
+
+#left-pane>ul>li:hover {
+    cursor: pointer;
+    color: green;
+}
+
+#menu-icon {
+    font-size: 2em;
+    padding-left: 1em;
+}
+
+#menu-icon:hover{
+    cursor: pointer;
+}
+
+.wrapper {
+    width: 100%;
+
+}
+
+@media screen and (max-width: 500px) {
+    #menu-icon {
+        padding: .3em .5em 0 0;
+        float: right;
+    }
+}
+
