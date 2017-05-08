@@ -93,111 +93,110 @@ $(document).ready(function(){
                     new google.maps.event.trigger(marker, 'click');
                     // bounce the marker when location is clicked
                     marker.setAnimation(google.maps.Animation.BOUNCE);
-                    // make it stop bouncing after a short time
+                    // make it stop bouncing after two bounces
                     stopAnimation(marker);
                 }
             }
 
             self.currentLoc(clickedLoc);
         };
-        function stopAnimation(marker) {
-            setTimeout(function () {
-                marker.setAnimation(null);
-            }, 1500);
-        }
+
     };
 
     // initialize the map
     function initMap() {
 
         // use a constructor to create a new map JS object. You can use the coordinates
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -26.527692, lng: 153.073633},
-            zoom: 9,
-        });
-
-        const largeInfowindow = new google.maps.InfoWindow();
-        const bounds = new google.maps.LatLngBounds();
-
-        for (let i = 0; i < locations.length; i++) {
-            // Get info from the locations array.
-            let position = locations[i].location;
-            let title = locations[i].title;
-            let id = locations[i].id;
-            // Create a marker per location, and put into markers array.
-            let marker = new google.maps.Marker({
-                map: map,
-                position: position,
-                title: title,
-                animation: google.maps.Animation.DROP,
-                id: id
+        // but first make sure there was not a problem with Google Maps API
+        try {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -26.527692, lng: 153.073633},
+                zoom: 9,
             });
-            // Push the marker to array of markers.
-            markers.push(marker);
+            const largeInfowindow = new google.maps.InfoWindow();
+            const bounds = new google.maps.LatLngBounds();
 
-            // get wiki entry
-            let wikiEntry;
-            const wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+title+'&format=json&callback=wikiCallback';
+            for (let i = 0; i < locations.length; i++) {
+                // Get info from the locations array.
+                let position = locations[i].location;
+                let title = locations[i].title;
+                let id = locations[i].id;
+                // Create a marker per location, and put into markers array.
+                let marker = new google.maps.Marker({
+                    map: map,
+                    position: position,
+                    title: title,
+                    animation: google.maps.Animation.DROP,
+                    id: id
+                });
+                // Push the marker to array of markers.
+                markers.push(marker);
 
-            $.ajax({
-                url: wikiUrl,
-                dataType: 'jsonp',
-                // jsonp: callback  <- for use if you want to overide above callback in url
-                success: function (response) {
-                    wikiEntry = response[2][0];
-                }
-                // note: failure is handled in populateInfoWindow()
-            });
+                // get wiki entry
+                let wikiEntry;
+                const wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+title+'&format=json&callback=wikiCallback';
 
-            // get wiki picture/thumbnail
-            let wikiPic;
-            const wikiPicUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=150&pilimit=20&wbptterms=description&gpssearch='+title;
-            $.ajax({
-                url: wikiPicUrl,
-                dataType: 'jsonp',
-                // jsonp: callback  <- for use if you want to overide above callback in url
-                success: function (response) {
-                    wikiPic = response.query.pages[0].thumbnail.source;
-                    // console.log(response.query.pages[0].thumbnail.source);
-                }
-                // note: failure is handled in populateInfoWindow()
-            });
+                $.ajax({
+                    url: wikiUrl,
+                    dataType: 'jsonp',
+                    // jsonp: callback  <- for use if you want to overide above callback in url
+                    success: function (response) {
+                        wikiEntry = response[2][0];
+                    }
+                }).fail(function () {
+                    wikiEntry = 'Failed to get Wikipedia description'
+                });
 
-            // Create an onclick event to open an infowindow at each marker.
-            marker.addListener('click', function() {
-                populateInfoWindow(this, largeInfowindow, wikiEntry, wikiPic);
-            });
-            bounds.extend(markers[i].position);
-        }
+                // get wiki picture/thumbnail
+                let wikiPic;
+                const wikiPicUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=150&pilimit=20&wbptterms=description&gpssearch='+title;
+                $.ajax({
+                    url: wikiPicUrl,
+                    dataType: 'jsonp',
+                    // jsonp: callback  <- for use if you want to overide above callback in url
+                    success: function (response) {
+                        wikiPic = response.query.pages[0].thumbnail.source;
+                    }
+                }).fail(function () {
+                    wikiPic = 'img/fail.png';
+                });
 
-        // Extend the boundaries of the map for each marker
-        map.fitBounds(bounds);
+                // Create an onclick event to open an infowindow at each marker.
+                marker.addListener('click', function() {
+                    populateInfoWindow(this, largeInfowindow, wikiEntry, wikiPic);
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    stopAnimation(marker);
+                });
+                bounds.extend(markers[i].position);
+            }
 
-        window.addEventListener('resize', function(e) {
-            //Make sure the map bounds get updated on page resize
+            // Extend the boundaries of the map for each marker
             map.fitBounds(bounds);
-        });
 
-        // applying bindings here so that viewmodel has access to markers
-        ko.applyBindings(new ViewModel());
+            window.addEventListener('resize', function(e) {
+                //Make sure the map bounds get updated on page resize
+                map.fitBounds(bounds);
+            });
+        }
+        catch (err) {
+            return googleErrorHandler(err);
+        }
+        finally {
+            // applying bindings here so that viewmodel has access to markers
+            ko.applyBindings(new ViewModel());
+        }
 
     }
 
     function populateInfoWindow(marker, infowindow, wikiEntry, wikiPic) {
-        // make sure wikipedia returned something, if not display message
-        let _wikiEntry;
-        (wikiEntry === undefined) ? _wikiEntry = 'failed to get wikipedia description': _wikiEntry = wikiEntry;
-        let _wikiPic;
-        (wikiPic === undefined) ? _wikiPic = 'failed to get wikipedia description': _wikiPic = wikiPic;
-
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker !== marker) {
             infowindow.marker = marker;
             infowindow.setContent(
                 '<div style="text-align: center">'+
                     '<h3>' + marker.title + '</h3>' +
-                    '<p>'+ _wikiEntry + '</p>' +
-                    '<img src="'+ _wikiPic + '">' +
+                    '<p>'+ wikiEntry + '</p>' +
+                    '<img src="'+ wikiPic + '">' +
                 '</div>'
             );
             infowindow.open(map, marker);
@@ -215,7 +214,15 @@ $(document).ready(function(){
         this.location = loc.location;
     };
 
-    // Calls the initMap() function when the page loads
-    window.addEventListener('load', initMap);
+    function googleErrorHandler(err) {
+        let message = '<div class="alert alert-danger alert-dismissable">Failed to get resources from Google:  '+ err +' </div>';
+        $('#map').append(message);
+    }
+
+    function stopAnimation(marker) {
+        setTimeout(function () {
+            marker.setAnimation(null);
+        }, 1400);
+    }
 
 });

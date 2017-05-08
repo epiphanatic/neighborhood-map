@@ -1,4 +1,9 @@
-html, body {
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
     margin: 0;
     padding: 0;
 }
@@ -13,7 +18,7 @@ h3 {
     padding-left: .5em;
 }
 
-input[type='search'] {
+input[type="search"] {
     width: 90%;
     margin-left: .5em;
 }
@@ -27,8 +32,6 @@ input[type='search'] {
 
 #map {
     height: 91vh;
-    /*width: 75%;*/
-    /*margin-left: 25%;*/
 }
 
 #left-pane {
@@ -61,8 +64,6 @@ input[type='search'] {
     color: white;
     font-size: x-small;
     padding: 0 0 0 .5em;
-    position: absolute;
-    bottom: 20vh;
 }
 
 #menu-icon {
@@ -74,7 +75,7 @@ input[type='search'] {
     cursor: pointer;
 }
 
-.wrapper {
+#wrapper {
     width: 100%;
 
 }
