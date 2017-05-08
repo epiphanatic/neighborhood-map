@@ -208,10 +208,6 @@ $(document).ready(function(){
         }
     }
 
-    function getWikiEntry (title) {
-
-    }
-
     // location object
     const Location = function (loc) {
         this.title = loc.title;
@@ -221,8 +217,5 @@ $(document).ready(function(){
 
     // Calls the initMap() function when the page loads
     window.addEventListener('load', initMap);
-    // Vanilla JS way to listen for resizing of the window
-    // and adjust map bounds
-
 
 });

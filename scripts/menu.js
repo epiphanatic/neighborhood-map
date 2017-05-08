@@ -14,7 +14,7 @@ function togglePane() {
         menuIsOpen = false;
 
         // refresh map to get rid of extra whitespace
-        google.maps.event.trigger(map, 'resize')
+        google.maps.event.trigger(map, 'resize');
 
     } else {
         // open it
