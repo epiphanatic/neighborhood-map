@@ -14,7 +14,6 @@ h3 {
 }
 
 input[type='search'] {
-    height: 40px !important;
     width: 90%;
     margin-left: .5em;
 }
@@ -57,9 +56,18 @@ input[type='search'] {
     color: green;
 }
 
+#left-pane span {
+    background-color: black;
+    color: white;
+    font-size: x-small;
+    padding: 0 0 0 .5em;
+    position: absolute;
+    bottom: 20vh;
+}
+
 #menu-icon {
     font-size: 2em;
-    padding-left: 1em;
+    padding-left: 1.5em;
 }
 
 #menu-icon:hover{
