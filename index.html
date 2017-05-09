@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
     <title>Neighborhood Map</title>
 </head>
@@ -28,6 +29,7 @@
             <span>Location data/images provided by Wikipedia.</span>
         </nav>
         <main id="map">
+            <div class="alert alert-danger alert-dismissable" data-bind="text: gMapError"></div>
         </main>
     </div>
 
@@ -35,11 +37,11 @@
     <script src="libs/jquery-3.1.1.min.js"></script>
     <script src="libs/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="scripts/main.js"></script>
+    <script async src="scripts/main.js"></script>
     <script src="scripts/menu.js"></script>
     <script async defer src="https://use.fontawesome.com/f3df52466f.js"></script>
     <!--NOTE: error handling for below is performed in main.js-->
-    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCfPAwwT0vjb6QuZ6aiEX6i0IT4H335ko&v=3&callback=initMap">
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCfPAwwT0vjb6QuZ6aiEX6i0IT4H335ko&v=3&callback=initMap" onerror="ViewModel().googleErrorHandler()">
     </script>
 </body>
 </html>
