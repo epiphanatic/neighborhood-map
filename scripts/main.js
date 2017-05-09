@@ -1,4 +1,4 @@
-$(document).ready(function(){
+
 
     // global vars
     let map;
@@ -225,4 +225,3 @@ $(document).ready(function(){
         }, 1400);
     }
 
-});
