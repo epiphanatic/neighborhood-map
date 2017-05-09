@@ -158,7 +158,7 @@
                     wikiEntry = response[2][0];
                 }
             }).fail(function () {
-                wikiEntry = 'Failed to get Wikipedia description'
+                wikiEntry = 'Failed to get Wikipedia description';
             });
 
             // get wiki picture/thumbnail
